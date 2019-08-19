@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script type="text/javascript" src="jquery-3.4.1.js"></script>
+    <script type="text/javascript">
+      var users = {};
+
+      users['user1'] = {
+        'name': '1번',
+        'age': '11',
+        'email': '111@gmail.com',
+        'phonenumber': '01011111111',
+        'thumbnail': 'db/190806/190806-1'
+      }
+      users['user2'] = {
+        'name': '2번',
+        'age': '22',
+        'email': '222@gmail.com',
+        'phonenumber': '01022222222',
+        'thumbnail': 'db/190806/190806-2'
+      }
+
+
+      var dataList = [];
+      dataList.push(
+        {
+          idx : 1,
+          title : 'title1',
+          content : 'content1',
+          imgName : '190806-1.jpg',
+          userId : 'user1'
+        }
+      );
+      dataList.push(
+        {
+          idx : 2,
+          title : 'title2',
+          content : 'content2',
+          imgName : '190806-2.jpg',
+          userId : 'user2'
+        }
+      );
+
+    </script>
+
+    <style>
+      body{
+        background-color: #ececec;
+      }
+    #popup{
+      position: fixed;
+      top : 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #00000057;
+    }
+
+    #list{
+      width: 600px;
+      margin: auto;
+    }
+
+    #list img{
+      width: 100%;
+    }
+
+    #list.row{
+      margin-bottom: 60px;
+      border: 1px solid lightgrey;
+      background-color: white;
+    }
+
+    #popupContent{
+      width: 500px;
+      height: 300px;
+      background-color: white;
+      margin: auto;
+    }
+    #close{
+      width: 500px;
+      height:100px;
+      background-color: lightgrey;
+      margin: auto;
+    }
+
+    .row .comment .history > div {
+      padding: 10px 0;
+    }
+
+    </style>
+  </head>
+  <body>
+    <div id="list"></div>
+    <div id="chooseProfile">chooseProfile</div>
+
+  </body>
+
+  <script type="text/javascript">
+    var $list = $('#list');
+
+    $.each(dataList, function(i, v){
+        var $row = $(
+        '<div class="row">' +
+          '<div class="user">' + v.userId + '</div>' +
+          '<div class="title">' + v.title + '</div>' +
+          '<div class="img"><img src="db/190806/' +v.imgName +'"></div>' +
+          '<div class="content">' + v.content + '</div>' +
+          '<div class="comment">' +
+            '<div class="writing">' +
+                '<div class="_1"><input type="text"></div>' +
+                '<div class="_2">등록</div>' +
+                '<div class="history"></div>' +
+            '</div>' +
+          '</div>' +
+       '</div>'
+       );
+       var $history = $row.find(".history");
+       var $valueInput = $row.find(".writing").find("._1").find("input");
+       $row.find('.writing').find('._2').click(function(){
+          var value = $valueInput.val();
+          $valueInput.val('');
+          var $div = $('<div class="comments">' + value+ '<button class="commentClose">delete</button></div>');
+
+          $div.find('button').click(function(){
+              $div.remove();
+          });
+          $history.append($div);
+       });
+       $row.find(".user").click(function(){
+          var $popup = $(
+            '<div id="popup">' +
+              '<div id="popupContent">' +
+              '</div>' +
+              '<div id="close">닫기</div>' +
+            '</div>'
+          );
+
+          $popup.find("#popupContent").append("<div>"+users[v.userId].name+"</div>")
+
+          $popup.find("#close").click(function(){
+             $popup.remove();
+          });
+
+          $('body').append($popup);
+      });
+       $list.append($row);
+    });
+
+  </script>
+
+
+  <script type="text/javascript">
+    var $chooseProfile = $('#chooseProfile');
+    $chooseProfile.click(function(){
+      var $profilelist = $(
+        '<div>'+'</div>'
+      );
+      $.each(dataList, function(i,v){
+        console.log("2");
+        var $profiles = $(
+          '<div class="profilesorts">' +
+            '<div><img class = "prfimg" src = "db/190806/' + v.imgName + '"></div>' +
+            '<div class="prfid">' + v.userId + '</div>' +
+          '</div>'
+        );
+        $profilelist.append($profiles);
+
+      });
+      $('body').append($profilelist);
+    });
+  </script>
+<!-- 수요일 메모
+->이제 대충 어느정도 알것같다! 댓글창 재정비하고 사용자리스트에 하나 더 추가해서 이것저것 더 해봤다! 음 근데 아직 어렵긴 함
+원본 비율 맞춰서 이미지 크기 조정하는거는 어케하는걸까
+
+0818메모
+아니 이거 왜 안돼
+도전 목표(였던것): 사용자 리스트 만드는거. 마치라잌 구글로그인창. 팝업창 참고하면 될 것 같고, 최종 목표는 유저선택 -> 댓글 달면 유저 이름과 함께 코멘트 출력 -> 썸네일 누르면 그 화면으로 이동.
+근데 이거 에바ㅇㅓ려워 후,,,,,,,,,,,,에바다 일단 해보자
+
+0819메모
+에바야 왜안돼ㅠㅠㅠㅠㅠ 아니 짜증나네 -->
+
+  <style>
+
+    .prfimg{
+      width: 50px;
+      height: 50px;
+      float: left;
+    }
+    .prfid{
+      float:right;
+    }
+    .history{
+      background-color: white;
+    }
+    .commentClose{
+      float: right;
+      margin-right: 8px;
+    }
+    .comments{
+      width: 100%;
+      height: auto;
+      padding: 10px;
+    }
+    .profilelist{
+      position: fixed;
+      top : 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: white;
+    }
+  </style>
+</html>
